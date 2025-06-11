@@ -53,3 +53,8 @@ export const LANGUAGES = {
   JAPANESE: 'ja',
   ENGLISH: 'en',
 }
+
+/**
+ * ポケモンの総数
+ */
+export const TOTAL_POKEMON = 1025

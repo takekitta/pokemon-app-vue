@@ -1,5 +1,6 @@
 <script>
 import { fetchPokemon, getColorByJapaneseType } from '@/utils/pokemonApi.js'
+import { TOTAL_POKEMON } from '@/constants/pokemon.js'
 import Loader from '@/components/Loader.vue'
 
 export default {
@@ -16,7 +17,7 @@ export default {
   },
 
   async mounted() {
-    await this.loadPokemon(25)
+    await this.loadPokemon(25) // 初期表示はピカチュウ
   },
 
   computed: {
@@ -50,6 +51,23 @@ export default {
       }
     },
 
+    async loadRandomPokemon() {
+      const randomId = Math.floor(Math.random() * TOTAL_POKEMON) + 1
+      await this.loadPokemon(randomId)
+    },
+
+    async loadPreviousPokemon() {
+      if (this.pokemon && this.pokemon.id > 1) {
+        await this.loadPokemon(this.pokemon.id - 1)
+      }
+    },
+
+    async loadNextPokemon() {
+      if (this.pokemon && this.pokemon.id < TOTAL_POKEMON) {
+        await this.loadPokemon(this.pokemon.id + 1)
+      }
+    },
+
     /**
      * タイプの色を取得
      */
@@ -73,6 +91,22 @@ export default {
 
 <template>
   <div class="pokemon-app">
+    <!-- コントロールボタン -->
+    <div class="controls">
+      <button @click="loadRandomPokemon" :disabled="loading" class="btn btn-primary">
+        ランダム
+      </button>
+      <button
+        @click="loadPreviousPokemon"
+        :disabled="loading || !pokemon"
+        class="btn btn-secondary"
+      >
+        前へ
+      </button>
+      <button @click="loadNextPokemon" :disabled="loading || !pokemon" class="btn btn-secondary">
+        次へ
+      </button>
+    </div>
     <!-- ローディング表示 -->
     <Loader v-if="loading" text="ポケモンを読み込み中..." />
     <!-- ポケモン表示 -->
@@ -177,5 +211,13 @@ export default {
   border: 2px solid var(--error-color);
   border-radius: 10px;
   background-color: #ffebee;
+}
+
+.controls {
+  margin-bottom: 30px;
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  flex-wrap: wrap;
 }
 </style>
