@@ -1,0 +1,39 @@
+:root {
+  /* タイプの色 */
+  --type-normal: #a8a878;
+  --type-fire: #f08030;
+  --type-water: #6890f0;
+  --type-electric: #f8d030;
+  --type-grass: #78c850;
+  --type-ice: #98d8d8;
+  --type-fighting: #c03028;
+  --type-poison: #a040a0;
+  --type-ground: #e0c068;
+  --type-flying: #a890f0;
+  --type-psychic: #f85888;
+  --type-bug: #a8b820;
+  --type-rock: #b8a038;
+  --type-ghost: #705898;
+  --type-dragon: #7038f8;
+  --type-dark: #705848;
+  --type-steel: #b8b8d0;
+  --type-fairy: #ee99ac;
+
+  /* アプリケーション共通色 */
+  --pokemon-primary: #3c5aa6;
+  --pokemon-secondary: #ffcb05;
+  --error-color: #d32f2f;
+  --error-bg: #ffebee;
+  --text-primary: #2c2c2c;
+  --text-secondary: #666;
+  --color-white: #fff;
+  --color-black: #000;
+
+  /* アプリケーション共通フォント */
+  --font-family: 'DotGothic16', sans-serif;
+
+  /* 共通サイズ */
+  --border-radius: 16px;
+  --card-padding: 32px;
+  --card-max-width: 360px;
+}

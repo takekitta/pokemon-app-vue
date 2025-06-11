@@ -1,1 +1,11 @@
 @import './base.css';
+
+html {
+  font-size: 16px;
+}
+body {
+  font-family: var(--font-family);
+  color: var(--text-primary);
+  margin: 0;
+  padding: 0;
+}
