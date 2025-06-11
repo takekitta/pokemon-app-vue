@@ -1,0 +1,29 @@
+.pokemon-input {
+  padding: 10px 15px;
+  border: 2px solid var(--pokemon-primary);
+  border-radius: 8px;
+  font-family: 'DotGothic16', monospace;
+  font-size: 14px;
+  width: 120px;
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+.pokemon-input:focus {
+  outline: none;
+  border-color: var(--pokemon-secondary);
+  box-shadow: 0 0 0 2px rgba(255, 203, 5, 0.3);
+}
+
+.pokemon-input:invalid {
+  border-color: var(--error-color);
+}
+
+.input-group {
+  margin-bottom: 30px;
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+}

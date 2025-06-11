@@ -13,6 +13,8 @@ export default {
       pokemon: null,
       loading: false,
       error: null,
+      inputId: null, // ユーザーが入力するポケモンID
+      TOTAL_POKEMON, // 全ポケモン数を定数として使用
     }
   },
 
@@ -33,6 +35,13 @@ export default {
     cardBackgroundGradient() {
       const color = this.primaryTypeColor
       return `linear-gradient(135deg, ${color}20 0%, ${color}10 100%)`
+    },
+
+    /**
+     * 入力されたIDが有効かどうかをチェック
+     */
+    isValidId() {
+      return this.inputId && this.inputId >= 1 && this.inputId <= TOTAL_POKEMON
     },
   },
 
@@ -65,6 +74,13 @@ export default {
     async loadNextPokemon() {
       if (this.pokemon && this.pokemon.id < TOTAL_POKEMON) {
         await this.loadPokemon(this.pokemon.id + 1)
+      }
+    },
+
+    async loadPokemonById() {
+      if (this.isValidId) {
+        await this.loadPokemon(this.inputId)
+        this.inputId = null // 入力をクリア
       }
     },
 
@@ -107,8 +123,26 @@ export default {
         次へ
       </button>
     </div>
+
+    <!-- ID入力フィールド -->
+    <div class="input-group">
+      <input
+        v-model.number="inputId"
+        type="number"
+        min="1"
+        :max="TOTAL_POKEMON"
+        placeholder="ID入力"
+        class="pokemon-input"
+        @keyup.enter="loadPokemonById"
+      />
+      <button @click="loadPokemonById" :disabled="loading || !isValidId" class="btn btn-primary">
+        検索
+      </button>
+    </div>
+
     <!-- ローディング表示 -->
     <Loader v-if="loading" text="ポケモンを読み込み中..." />
+
     <!-- ポケモン表示 -->
     <div v-else-if="pokemon" class="pokemon-card">
       <h2>No.{{ pokemon.id }}</h2>
@@ -138,17 +172,6 @@ export default {
 </template>
 
 <style scoped>
-.pokemon-app {
-  text-align: center;
-  padding: 20px;
-}
-
-.loading {
-  font-size: 18px;
-  color: var(--text-secondary);
-  margin: 50px 0;
-}
-
 .pokemon-card {
   border: 3px solid v-bind(cardBorderColor);
   border-radius: 15px;
@@ -158,6 +181,13 @@ export default {
   min-height: 400px;
   background: v-bind(cardBackgroundGradient);
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  animation: fadeIn 0.5s ease-in;
+}
+
+.pokemon-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
 }
 
 .pokemon-card h2 {
@@ -176,48 +206,10 @@ export default {
   width: 200px;
   height: 200px;
   object-fit: contain;
+  transition: transform 0.3s ease;
 }
 
-.types {
-  margin-top: 15px;
-}
-
-.pokemon-info {
-  margin-top: 15px;
-  font-size: 14px;
-  color: var(--text-secondary);
-}
-
-.pokemon-info p {
-  margin: 5px 0;
-}
-
-.type-badge {
-  display: inline-block;
-  color: var(--color-white);
-  padding: 5px 12px;
-  border-radius: 20px;
-  margin: 0 5px;
-  font-size: 14px;
-  font-weight: bold;
-  text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.3);
-}
-
-.error {
-  color: var(--error-color);
-  font-size: 16px;
-  margin: 50px 0;
-  padding: 20px;
-  border: 2px solid var(--error-color);
-  border-radius: 10px;
-  background-color: #ffebee;
-}
-
-.controls {
-  margin-bottom: 30px;
-  display: flex;
-  gap: 10px;
-  justify-content: center;
-  flex-wrap: wrap;
+.pokemon-card img:hover {
+  transform: scale(1.05);
 }
 </style>

@@ -1,0 +1,57 @@
+.controls {
+  margin-bottom: 30px;
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.pokemon-app {
+  text-align: center;
+  padding: 20px;
+}
+
+.error {
+  color: var(--error-color);
+  font-size: 16px;
+  margin: 50px 0;
+  padding: 20px;
+  border: 2px solid var(--error-color);
+  border-radius: 10px;
+  background-color: var(--error-bg);
+}
+
+.loading {
+  font-size: 18px;
+  color: var(--text-secondary);
+  margin: 50px 0;
+  text-align: center;
+}
+
+.types {
+  margin-top: 15px;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+.pokemon-info {
+  margin-top: 15px;
+  font-size: 14px;
+  color: var(--text-secondary);
+}
+
+.pokemon-info p {
+  margin: 5px 0;
+}
+
+.type-badge {
+  display: inline-block;
+  color: var(--color-white);
+  padding: 5px 12px;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: bold;
+  text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.3);
+}
