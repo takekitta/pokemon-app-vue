@@ -1,16 +1,15 @@
-# pokemon-app-vue
+# Vue.js ポケモン図鑑
 
-This template should help get you started developing with Vue 3 in Vite.
+## プロジェクト概要
 
-## Recommended IDE Setup
+- `create vue@latest`で環境作成
+- **API**: PokeAPI (<https://pokeapi.co/>)
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+## 学習目標
 
-## Customize configuration
+段階的にVue.jsの機能を習得しながら、実用的なポケモン図鑑アプリを開発する
 
-See [Vite Configuration Reference](https://vite.dev/config/).
-
-## Project Setup
+## セットアップ
 
 ```sh
 npm install

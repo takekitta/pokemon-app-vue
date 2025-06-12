@@ -1,4 +1,5 @@
 import {
+  TOTAL_POKEMON,
   TYPE_COLORS,
   TYPE_TRANSLATIONS,
   POKEMON_API_ENDPOINTS,
@@ -100,4 +101,71 @@ export async function fetchPokemon(pokemonId) {
     console.error('ポケモンデータの取得エラー:', error)
     throw error
   }
+}
+
+/**
+ * ポケモンリストを取得（ページネーション対応）
+ * @param {number} page - ページ番号（1から開始）
+ * @param {number} limit - 1ページあたりの件数
+ * @returns {Promise<Object>} ポケモンリストデータ
+ */
+export async function fetchPokemonList(page = 1, limit = 20) {
+  const offset = (page - 1) * limit
+
+  // 最大ポケモン数を超えないようにチェック
+  if (offset >= TOTAL_POKEMON) {
+    throw new Error(`指定されたページは存在しません。最大${TOTAL_POKEMON}匹です。`)
+  }
+
+  // 最後のページで取得件数を調整
+  const adjustedLimit = Math.min(limit, TOTAL_POKEMON - offset)
+
+  try {
+    // ポケモンリストを取得
+    const response = await fetch(
+      `${POKEMON_API_ENDPOINTS.POKEMON}?limit=${adjustedLimit}&offset=${offset}`,
+    )
+
+    if (!response.ok) {
+      throw new Error(`ポケモンリストの取得に失敗: ${response.status}`)
+    }
+
+    const data = await response.json()
+
+    // 各ポケモンの詳細情報を並列取得
+    const pokemonDetails = await Promise.all(
+      data.results.map(async (pokemon) => {
+        const id = extractIdFromUrl(pokemon.url)
+        // IDが範囲内かチェック
+        if (id <= TOTAL_POKEMON) {
+          return await fetchPokemon(id)
+        }
+        return null
+      }),
+    )
+
+    // nullを除外
+    const validPokemon = pokemonDetails.filter((pokemon) => pokemon !== null)
+
+    return {
+      pokemon: validPokemon,
+      total: TOTAL_POKEMON, // 実際のポケモン数を使用
+      hasNext: offset + limit < TOTAL_POKEMON,
+      hasPrevious: offset > 0,
+      currentPage: page,
+      totalPages: Math.ceil(TOTAL_POKEMON / limit), // 正確な総ページ数を計算
+    }
+  } catch (error) {
+    console.error('ポケモンリストの取得エラー:', error)
+    throw error
+  }
+}
+
+/**
+ * ポケモンURLからIDを抽出
+ * @param {string} url - PokeAPIのポケモンURL
+ * @returns {number} ポケモンID
+ */
+function extractIdFromUrl(url) {
+  return parseInt(url.split('/').filter(Boolean).pop())
 }

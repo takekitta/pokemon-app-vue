@@ -1,108 +1,78 @@
-<script>
+<script setup>
+import { ref, computed, onMounted } from 'vue'
 import { fetchPokemon, getColorByJapaneseType } from '@/utils/pokemonApi.js'
 import { TOTAL_POKEMON } from '@/constants/pokemon.js'
 import Loader from '@/components/Loader.vue'
 
-export default {
-  name: 'HomeView',
-  components: {
-    Loader,
-  },
-  data() {
-    return {
-      pokemon: null,
-      loading: false,
-      error: null,
-      inputId: null, // ユーザーが入力するポケモンID
-      TOTAL_POKEMON, // 全ポケモン数を定数として使用
-    }
-  },
+/** リアクティブな変数 */
+const pokemon = ref(null)
+const loading = ref(false)
+const error = ref(null)
+const inputId = ref(null)
 
-  async mounted() {
-    await this.loadPokemon(25) // 初期表示はピカチュウ
-  },
+/** computed */
+const primaryTypeColor = computed(() => {
+  const firstType = pokemon.value?.types?.[0]
+  return firstType ? getColorByJapaneseType(firstType) : '#ddd'
+})
 
-  computed: {
-    primaryTypeColor() {
-      const firstType = this.pokemon?.types?.[0]
-      return firstType ? getColorByJapaneseType(firstType) : '#ddd'
-    },
+const cardBorderColor = computed(() => primaryTypeColor.value)
 
-    cardBorderColor() {
-      return this.primaryTypeColor
-    },
+const cardBackgroundGradient = computed(() => {
+  const color = primaryTypeColor.value
+  return `linear-gradient(135deg, ${color}20 0%, ${color}10 100%)`
+})
 
-    cardBackgroundGradient() {
-      const color = this.primaryTypeColor
-      return `linear-gradient(135deg, ${color}20 0%, ${color}10 100%)`
-    },
+const isValidId = computed(() => {
+  return inputId.value && inputId.value >= 1 && inputId.value <= TOTAL_POKEMON
+})
 
-    /**
-     * 入力されたIDが有効かどうかをチェック
-     */
-    isValidId() {
-      return this.inputId && this.inputId >= 1 && this.inputId <= TOTAL_POKEMON
-    },
-  },
+const loadPokemon = async (pokemonId) => {
+  loading.value = true
+  error.value = null
 
-  methods: {
-    async loadPokemon(pokemonId) {
-      this.loading = true
-      this.error = null
-
-      try {
-        this.pokemon = await fetchPokemon(pokemonId)
-      } catch (err) {
-        this.error = err.message
-        console.error('ポケモンの読み込みに失敗:', err)
-      } finally {
-        this.loading = false
-      }
-    },
-
-    async loadRandomPokemon() {
-      const randomId = Math.floor(Math.random() * TOTAL_POKEMON) + 1
-      await this.loadPokemon(randomId)
-    },
-
-    async loadPreviousPokemon() {
-      if (this.pokemon && this.pokemon.id > 1) {
-        await this.loadPokemon(this.pokemon.id - 1)
-      }
-    },
-
-    async loadNextPokemon() {
-      if (this.pokemon && this.pokemon.id < TOTAL_POKEMON) {
-        await this.loadPokemon(this.pokemon.id + 1)
-      }
-    },
-
-    async loadPokemonById() {
-      if (this.isValidId) {
-        await this.loadPokemon(this.inputId)
-        this.inputId = null // 入力をクリア
-      }
-    },
-
-    /**
-     * タイプの色を取得
-     */
-    getTypeColor(type) {
-      return getColorByJapaneseType(type)
-    },
-
-    /**
-     * 身長と体重のフォーマット
-     */
-    formatHeight(height) {
-      return (height / 10).toFixed(1)
-    },
-
-    formatWeight(weight) {
-      return (weight / 10).toFixed(1)
-    },
-  },
+  try {
+    pokemon.value = await fetchPokemon(pokemonId)
+  } catch (err) {
+    error.value = err.message
+    console.error('ポケモンの読み込みに失敗:', err)
+  } finally {
+    loading.value = false
+  }
 }
+
+const loadRandomPokemon = async () => {
+  const randomId = Math.floor(Math.random() * TOTAL_POKEMON) + 1
+  await loadPokemon(randomId)
+}
+
+const loadPreviousPokemon = async () => {
+  if (pokemon.value && pokemon.value.id > 1) {
+    await loadPokemon(pokemon.value.id - 1)
+  }
+}
+
+const loadNextPokemon = async () => {
+  if (pokemon.value && pokemon.value.id < TOTAL_POKEMON) {
+    await loadPokemon(pokemon.value.id + 1)
+  }
+}
+
+const loadPokemonById = async () => {
+  if (isValidId.value) {
+    await loadPokemon(inputId.value)
+    inputId.value = null
+  }
+}
+
+/** ヘルパー関数 */
+const getTypeColor = (type) => getColorByJapaneseType(type)
+const formatHeight = (height) => (height / 10).toFixed(1)
+const formatWeight = (weight) => (weight / 10).toFixed(1)
+
+onMounted(async () => {
+  await loadPokemon(25) // 初期表示はピカチュウ
+})
 </script>
 
 <template>
@@ -175,7 +145,6 @@ export default {
 .pokemon-card {
   border: 3px solid v-bind(cardBorderColor);
   border-radius: 15px;
-  padding: 30px;
   margin: 20px auto;
   max-width: 350px;
   min-height: 400px;
