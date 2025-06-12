@@ -1,16 +1,50 @@
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, watch } from 'vue'
 import { fetchPokemonList } from '@/utils/pokemonApi.js'
 import PokemonCard from '@/components/PokemonCard.vue'
 import Loader from '@/components/Loader.vue'
+import PaginationComponent from '@/components/PaginationComponent.vue'
+import { useRoute, useRouter } from 'vue-router'
+import { UI_CONSTANTS } from '@/constants/pokemon'
 
+// リアクティブなデータ
 const pokemonList = ref([])
 const loading = ref(false)
 const error = ref(null)
 const currentPage = ref(1)
-const itemsPerPage = ref(20)
+const itemsPerPage = ref(UI_CONSTANTS.DEFAULT_ITEMS_PER_PAGE[1]) // デフォルトのページサイズ
 const totalCount = ref(0)
 const totalPages = ref(0)
+
+const router = useRouter()
+const route = useRoute()
+
+// Methods
+const updateUrlParams = (page, pageSize) => {
+  const query = {
+    ...route.query,
+    page: page.toString(),
+    limit: pageSize.toString(),
+  }
+
+  // 現在のクエリと同じ場合は更新しない
+  if (route.query.page === query.page && route.query.limit === query.limit) {
+    return
+  }
+
+  router.replace({ query })
+}
+
+// URLクエリパラメータから初期値を設定
+const initializeFromQuery = () => {
+  const queryPage = parseInt(route.query.page) || 1
+  const queryLimit = parseInt(route.query.limit) || UI_CONSTANTS.DEFAULT_ITEMS_PER_PAGE[1]
+
+  currentPage.value = Math.max(1, queryPage)
+  itemsPerPage.value = UI_CONSTANTS.DEFAULT_ITEMS_PER_PAGE.includes(queryLimit)
+    ? queryLimit
+    : UI_CONSTANTS.DEFAULT_ITEMS_PER_PAGE[1]
+}
 
 const loadPokemonList = async () => {
   loading.value = true
@@ -21,6 +55,13 @@ const loadPokemonList = async () => {
     pokemonList.value = data.pokemon
     totalCount.value = data.total
     totalPages.value = data.totalPages
+
+    // ページ数が総ページ数を超えている場合は1ページ目に戻る
+    if (currentPage.value > data.totalPages && data.totalPages > 0) {
+      currentPage.value = 1
+      updateUrlParams(1, itemsPerPage.value)
+      return loadPokemonList()
+    }
   } catch (err) {
     error.value = err.message
   } finally {
@@ -28,33 +69,43 @@ const loadPokemonList = async () => {
   }
 }
 
-const nextPage = async () => {
-  if (currentPage.value < totalPages.value && !loading.value) {
-    currentPage.value++
-    await loadPokemonList()
-    scrollToTop()
-  }
+const handlePageChange = async (page) => {
+  currentPage.value = page
+  updateUrlParams(page, itemsPerPage.value)
+  await loadPokemonList()
+  scrollToTop()
 }
 
-const previousPage = async () => {
-  if (currentPage.value > 1 && !loading.value) {
-    currentPage.value--
-    await loadPokemonList()
-    scrollToTop()
-  }
+const handlePageSizeChange = async (newPageSize) => {
+  itemsPerPage.value = newPageSize
+  currentPage.value = 1 // ページサイズ変更時は1ページ目に戻る
+  updateUrlParams(1, newPageSize)
+  await loadPokemonList()
+  scrollToTop()
 }
 
 const selectPokemon = (pokemon) => {
-  // TODO: ポケモン選択時の処理を実装
-  console.log('選択されたポケモン:', pokemon)
-  alert(`${pokemon.name}が選択されました！`)
+  router.push(`/pokemon/${pokemon.id}`)
 }
 
 const scrollToTop = () => {
   window.scrollTo({ top: 0, behavior: 'smooth' })
 }
 
+watch(
+  () => route.query,
+  (newQuery, oldQuery) => {
+    // 外部からのURL変更（ブラウザの戻る/進むボタンなど）に対応
+    if (newQuery.page !== oldQuery.page || newQuery.limit !== oldQuery.limit) {
+      initializeFromQuery()
+      loadPokemonList()
+    }
+  },
+)
+
+// ライフサイクル
 onMounted(async () => {
+  initializeFromQuery()
   await loadPokemonList()
 })
 </script>
@@ -76,6 +127,18 @@ onMounted(async () => {
 
     <!-- ポケモン一覧 -->
     <div v-else class="content">
+      <!-- ページネーション -->
+      <PaginationComponent
+        v-if="pokemonList.length > 0"
+        :current-page="currentPage"
+        :total-pages="totalPages"
+        :total-items="totalCount"
+        :items-per-page="itemsPerPage"
+        :loading="loading"
+        @page-change="handlePageChange"
+        @page-size-change="handlePageSizeChange"
+      />
+
       <div class="pokemon-grid">
         <PokemonCard
           v-for="pokemon in pokemonList"
@@ -86,29 +149,16 @@ onMounted(async () => {
       </div>
 
       <!-- ページネーション -->
-      <div v-if="pokemonList.length > 0" class="pagination">
-        <button
-          @click="previousPage"
-          :disabled="currentPage === 1 || loading"
-          class="btn btn-secondary"
-        >
-          ← 前へ
-        </button>
-
-        <div class="page-info">
-          <span class="current-page">{{ currentPage }}</span>
-          <span class="separator">/</span>
-          <span class="total-pages">{{ totalPages }}</span>
-        </div>
-
-        <button
-          @click="nextPage"
-          :disabled="currentPage === totalPages || loading"
-          class="btn btn-secondary"
-        >
-          次へ →
-        </button>
-      </div>
+      <PaginationComponent
+        v-if="pokemonList.length > 0"
+        :current-page="currentPage"
+        :total-pages="totalPages"
+        :total-items="totalCount"
+        :items-per-page="itemsPerPage"
+        :loading="loading"
+        @page-change="handlePageChange"
+        @page-size-change="handlePageSizeChange"
+      />
     </div>
   </div>
 </template>

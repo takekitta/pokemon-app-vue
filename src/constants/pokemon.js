@@ -58,3 +58,27 @@ export const LANGUAGES = {
  * ポケモンの総数
  */
 export const TOTAL_POKEMON = 1025
+
+/**
+ * UI表示用の定数
+ */
+export const UI_CONSTANTS = Object.freeze({
+  DEFAULT_ITEMS_PER_PAGE: [10, 20, 50, 100],
+  MAX_ITEMS_PER_PAGE: 50,
+  LOADING_DELAY_MS: 300,
+  ERROR_RETRY_ATTEMPTS: 3,
+  ANIMATION_DURATION_MS: 300,
+})
+
+/**
+ * エラーメッセージ定数
+ */
+export const ERROR_MESSAGES = Object.freeze({
+  POKEMON_NOT_FOUND: 'ポケモンが見つかりませんでした',
+  NETWORK_ERROR: 'ネットワークエラーが発生しました',
+  INVALID_ID: '無効なポケモンIDです',
+  POKEMON_ID_NOT_SPECIFIED: 'ポケモンIDが指定されていません',
+  POKEMON_DATA_ERROR: 'ポケモンデータの取得に失敗しました',
+  EVOLUTION_CHAIN_ERROR: '進化チェーンの取得に失敗しました',
+  SPECIES_DATA_ERROR: '種族データの取得に失敗しました',
+})
