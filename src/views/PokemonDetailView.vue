@@ -469,12 +469,14 @@ onMounted(async () => {
 
 .evolution-level {
   margin-bottom: 30px;
+  width: fit-content;
 }
 
 .evolution-level-title {
   color: var(--text-secondary);
   font-size: 1.2rem;
   margin-bottom: 15px;
+  text-align: center;
 }
 
 .evolution-group {
@@ -489,6 +491,7 @@ onMounted(async () => {
   font-weight: bold;
   color: var(--text-secondary);
   margin: 15px 0;
+  text-align: center;
 }
 
 .pokemon-id {

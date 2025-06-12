@@ -28,6 +28,8 @@
   --text-secondary: #666;
   --color-white: #fff;
   --color-black: #000;
+  --color-gray: #f5f5f5;
+  --color-heart: #ff6b6b;
 
   /* アプリケーション共通フォント */
   --font-family: 'DotGothic16', sans-serif;
@@ -36,4 +38,27 @@
   --border-radius: 16px;
   --card-padding: 32px;
   --card-max-width: 360px;
+
+  /* RGB値（グラデーション用） */
+  --pokemon-primary-rgb: 74, 144, 226;
+  --pokemon-secondary-rgb: 80, 227, 194;
+
+  /* 新しいカラーパレット */
+  --gradient-primary: linear-gradient(
+    135deg,
+    var(--pokemon-primary) 0%,
+    var(--pokemon-secondary) 100%
+  );
+  --gradient-secondary: linear-gradient(135deg, #ff6b6b 0%, #feca57 100%);
+
+  /* シャドウ */
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.1);
+  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.1);
+
+  /* ボーダーラディウス */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 20px;
 }

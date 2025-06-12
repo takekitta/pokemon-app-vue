@@ -1,20 +1,13 @@
 <script setup>
+import AppHeader from '@/components/AppHeader.vue'
+import AppNavigation from '@/components/AppNavigation.vue'
 import '@/assets/main.css'
 </script>
 
 <template>
   <div class="app-container">
-    <header class="app-header">
-      <h1>ポケモン図鑑</h1>
-      <nav class="navigation">
-        <RouterLink to="/" class="nav-link">ホーム</RouterLink>
-        <RouterLink to="/list" class="nav-link">一覧</RouterLink>
-        <RouterLink to="/favorites" class="nav-link">
-          お気に入り
-          <span v-if="favoriteCount > 0" class="favorite-count">{{ favoriteCount }}</span>
-        </RouterLink>
-      </nav>
-    </header>
+    <AppHeader />
+    <AppNavigation />
 
     <main class="main-content">
       <RouterView />
@@ -27,55 +20,56 @@ import '@/assets/main.css'
   max-width: 1200px;
   margin: 0 auto;
   padding: 20px;
-}
-
-.app-header {
-  text-align: center;
-  margin-bottom: 30px;
-}
-
-.app-header h1 {
-  color: var(--text-primary);
-  margin-bottom: 20px;
-}
-
-.navigation {
+  min-height: 100vh;
   display: flex;
-  justify-content: center;
-  gap: 20px;
-  margin-bottom: 20px;
-}
-
-.nav-link {
-  padding: 10px 20px;
-  background: var(--pokemon-primary);
-  color: white;
-  text-decoration: none;
-  border-radius: 8px;
-  font-weight: bold;
-  transition: all 0.3s ease;
-}
-
-.nav-link:hover {
-  background: var(--pokemon-secondary);
-  transform: translateY(-2px);
-}
-
-.nav-link.router-link-active {
-  background: var(--pokemon-secondary);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  flex-direction: column;
 }
 
 .main-content {
-  min-height: 500px;
+  flex: 1;
+  margin-top: 32px;
+  animation: fadeIn 0.6s ease-out;
 }
 
-.favorite-count {
-  background: var(--pokemon-primary);
-  color: white;
-  border-radius: 10px;
-  padding: 2px 6px;
-  font-size: 0.8rem;
-  margin-left: 5px;
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.app-footer {
+  margin-top: 64px;
+  padding: 24px;
+  text-align: center;
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  background: linear-gradient(
+    135deg,
+    rgba(var(--pokemon-primary-rgb), 0.05) 0%,
+    rgba(var(--pokemon-secondary-rgb), 0.05) 100%
+  );
+  border-radius: 12px;
+}
+
+/* レスポンシブ対応 */
+@media (max-width: 768px) {
+  .app-container {
+    padding: 16px;
+  }
+
+  .main-content {
+    margin-top: 24px;
+  }
+
+  .app-footer {
+    margin-top: 48px;
+    padding: 20px;
+  }
 }
 </style>

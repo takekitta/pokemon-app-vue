@@ -1,0 +1,111 @@
+<script setup>
+import { computed } from 'vue'
+import { useRoute } from 'vue-router'
+import { useFavorites } from '@/composables/useFavorites.js'
+
+const route = useRoute()
+const { favoriteCount } = useFavorites()
+
+// ナビゲーションアイテムの定義
+const navItems = [
+  {
+    name: 'ホーム',
+    path: '/',
+    icon: '🏠',
+    description: 'ランダム表示',
+  },
+  {
+    name: '一覧',
+    path: '/list',
+    icon: '📋',
+    description: 'ポケモン図鑑',
+  },
+  {
+    name: 'お気に入り',
+    path: '/favorites',
+    icon: '❤️',
+    description: 'お気に入り',
+    badge: favoriteCount,
+  },
+]
+
+const isCurrentRoute = computed(() => (path) => {
+  if (path === '/') {
+    return route.path === '/'
+  }
+  return route.path.startsWith(path)
+})
+</script>
+
+<template>
+  <nav class="app-navigation">
+    <div class="nav-container">
+      <RouterLink
+        v-for="item in navItems"
+        :key="item.path"
+        :to="item.path"
+        class="nav-item"
+        :class="{ 'nav-item--active': isCurrentRoute(item.path) }"
+      >
+        <span class="nav-icon">{{ item.icon }}</span>
+        <span class="nav-text">{{ item.name }}</span>
+        <div v-if="item.badge && item.badge.value > 0" class="nav-badge">
+          {{ item.badge.value }}
+        </div>
+      </RouterLink>
+    </div>
+  </nav>
+</template>
+
+<style scoped>
+.app-navigation {
+  background: white;
+  border-radius: 12px;
+  padding: 8px;
+  box-shadow: 0 2px 16px rgba(0, 0, 0, 0.06);
+}
+
+.nav-container {
+  display: flex;
+  gap: 4px;
+}
+
+.nav-item {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 14px 20px;
+  color: var(--text-primary);
+  text-decoration: none;
+  transition: all 0.2s ease;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.nav-item:hover {
+  color: var(--pokemon-primary);
+}
+
+.nav-item--active {
+  color: var(--pokemon-primary);
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: 8px;
+}
+
+.nav-icon {
+  font-size: 16px;
+}
+
+.nav-badge {
+  background: var(--color-heart);
+  color: white;
+  border-radius: 8px;
+  padding: 2px 6px;
+  font-size: 10px;
+  font-weight: bold;
+  min-width: 16px;
+  text-align: center;
+}
+</style>
