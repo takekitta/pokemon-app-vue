@@ -3,10 +3,11 @@
   border: none;
   border-radius: 8px;
   font-family: 'DotGothic16', monospace;
-  font-size: 14px;
+  font-size: 0.875em;
   cursor: pointer;
   transition: all 0.3s ease;
   min-width: 80px;
+  line-height: 1em;
 }
 
 .btn:disabled {
@@ -16,7 +17,7 @@
 
 .btn-primary {
   background-color: var(--pokemon-primary);
-  color: white;
+  color: var(--color-white);
 }
 
 .btn-primary:hover:not(:disabled) {
@@ -26,10 +27,79 @@
 
 .btn-secondary {
   background-color: var(--text-secondary);
-  color: white;
+  color: var(--color-white);
 }
 
 .btn-secondary:hover:not(:disabled) {
   background-color: var(--text-primary);
   transform: translateY(-2px);
+}
+
+.btn-favorite {
+  background-color: var(--text-secondary);
+  color: var(--color-white);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-favorite:hover:not(:disabled) {
+  background-color: var(--text-primary);
+  transform: translateY(-2px);
+}
+
+.btn-favorite-active {
+  background-color: var(--pokemon-primary);
+  color: var(--color-white);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-favorite-active:hover:not(:disabled) {
+  background-color: var(--pokemon-secondary);
+  transform: translateY(-2px);
+}
+
+.btn--small {
+  padding: 6px 12px;
+  font-size: 0.75em;
+  min-width: 60px;
+}
+
+.btn--medium {
+  padding: 10px 20px;
+  font-size: 0.875em;
+  min-width: 80px;
+}
+
+.btn--large {
+  padding: 12px 24px;
+  font-size: 1em;
+  min-width: 100px;
+}
+
+.btn .heart-icon {
+  font-size: 1em;
+  transition: transform 0.2s ease;
+}
+
+.btn--small .heart-icon {
+  font-size: 0.75em;
+}
+
+.btn--medium .heart-icon {
+  font-size: 0.875em;
+}
+
+.btn--large .heart-icon {
+  font-size: 1em;
+}
+
+.btn:hover .heart-icon {
+  transform: scale(1.1);
+}
+
+.btn:active .heart-icon {
+  transform: scale(1.3);
 }

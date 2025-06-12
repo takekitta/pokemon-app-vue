@@ -2,10 +2,9 @@
 import { ref, onMounted, computed, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { fetchPokemonDetail, getColorByJapaneseType } from '@/utils/pokemonApi.js'
-
 import { ERROR_MESSAGES } from '@/constants/pokemon.js'
-
 import Loader from '@/components/Loader.vue'
+import FavoriteButton from '@/components/FavoriteButton.vue'
 
 const route = useRoute()
 const router = useRouter()
@@ -134,7 +133,15 @@ onMounted(async () => {
   <div class="pokemon-detail-view">
     <!-- 戻るボタン -->
     <div class="header-controls">
-      <button @click="goBack" class="btn btn-secondary">← 戻る</button>
+      <button @click="goBack" class="btn btn-secondary btn--medium">← 戻る</button>
+      <!-- お気に入りボタン -->
+      <FavoriteButton
+        v-if="pokemon"
+        :pokemon="pokemon"
+        size="medium"
+        variant="button"
+        @toggle="handleFavoriteToggle"
+      />
     </div>
 
     <!-- ローディング表示 -->
@@ -150,6 +157,13 @@ onMounted(async () => {
     <div v-else-if="pokemon" class="pokemon-detail">
       <!-- 基本情報カード -->
       <div class="pokemon-main-card">
+        <FavoriteButton
+          :pokemon="pokemon"
+          size="large"
+          variant="icon"
+          class="card-favorite-button"
+          @toggle="handleFavoriteToggle"
+        />
         <div class="pokemon-header">
           <h1>No.{{ pokemon.id }} {{ pokemon.name }}</h1>
         </div>
@@ -262,6 +276,9 @@ onMounted(async () => {
 }
 
 .header-controls {
+  display: flex;
+  align-items: center;
+  gap: 20px;
   margin-bottom: 20px;
 }
 
@@ -272,6 +289,7 @@ onMounted(async () => {
   margin-bottom: 30px;
   background: v-bind(cardBackgroundGradient);
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+  position: relative;
 }
 
 .pokemon-header h1 {
@@ -490,8 +508,20 @@ onMounted(async () => {
   color: var(--error-color);
 }
 
+.card-favorite-button {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  z-index: 10;
+}
+
 /* レスポンシブ対応 */
 @media (max-width: 768px) {
+  .header-controls {
+    flex-direction: column;
+    gap: 10px;
+  }
+
   .pokemon-content {
     grid-template-columns: 1fr;
     text-align: center;

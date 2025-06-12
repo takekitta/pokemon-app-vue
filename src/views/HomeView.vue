@@ -3,6 +3,7 @@ import { ref, computed, onMounted } from 'vue'
 import { fetchPokemon, getColorByJapaneseType } from '@/utils/pokemonApi.js'
 import { TOTAL_POKEMON, ERROR_MESSAGES } from '@/constants/pokemon.js'
 import Loader from '@/components/Loader.vue'
+import FavoriteButton from '@/components/FavoriteButton.vue'
 import { useRouter } from 'vue-router'
 
 /** リアクティブな変数 */
@@ -113,7 +114,11 @@ onMounted(async () => {
         class="pokemon-input"
         @keyup.enter="loadPokemonById"
       />
-      <button @click="loadPokemonById" :disabled="loading || !isValidId" class="btn btn-primary">
+      <button
+        @click="loadPokemonById"
+        :disabled="loading || !isValidId"
+        class="btn btn-primary btn--large"
+      >
         検索
       </button>
     </div>
@@ -123,6 +128,14 @@ onMounted(async () => {
 
     <!-- ポケモン表示 -->
     <div v-else-if="pokemon" class="pokemon-card" @click="selectPokemon(pokemon)">
+      <!-- お気に入りボタン -->
+      <FavoriteButton
+        :pokemon="pokemon"
+        size="medium"
+        variant="icon"
+        class="card-favorite-button"
+        @toggle="handleFavoriteToggle"
+      />
       <h2>No.{{ pokemon.id }}</h2>
       <img :src="pokemon.image" :alt="pokemon.name" />
       <h3>{{ pokemon.name }}</h3>
@@ -160,6 +173,7 @@ onMounted(async () => {
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
   transition: all 0.3s ease;
   animation: fadeIn 0.5s ease-in;
+  position: relative;
 }
 
 .pokemon-card:hover {
@@ -189,5 +203,12 @@ onMounted(async () => {
 
 .pokemon-card img:hover {
   transform: scale(1.05);
+}
+
+.card-favorite-button {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  z-index: 10;
 }
 </style>

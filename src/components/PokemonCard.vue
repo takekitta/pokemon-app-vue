@@ -1,6 +1,7 @@
 <script setup>
 import { computed } from 'vue'
 import { getColorByJapaneseType } from '@/utils/pokemonApi.js'
+import FavoriteButton from '@/components/FavoriteButton.vue'
 
 const props = defineProps({
   pokemon: {
@@ -10,7 +11,6 @@ const props = defineProps({
 })
 
 const emit = defineEmits(['select'])
-
 const primaryTypeColor = computed(() => {
   const firstType = props.pokemon?.types?.[0]
   return firstType ? getColorByJapaneseType(firstType) : '#ddd'
@@ -34,6 +34,14 @@ const selectPokemon = () => {
 
 <template>
   <div class="pokemon-card" @click="selectPokemon">
+    <!-- お気に入りボタン -->
+    <FavoriteButton
+      :pokemon="pokemon"
+      size="medium"
+      variant="icon"
+      class="favorite-button-position"
+      @toggle="handleFavoriteToggle"
+    />
     <div class="pokemon-number">No.{{ pokemon.id }}</div>
     <img :src="pokemon.image" :alt="pokemon.name" class="pokemon-image" loading="lazy" />
     <h3 class="pokemon-name">{{ pokemon.name }}</h3>
@@ -52,6 +60,7 @@ const selectPokemon = () => {
 
 <style scoped>
 .pokemon-card {
+  position: relative;
   border: 3px solid v-bind(cardBorderColor);
   border-radius: 12px;
   padding: 16px;
@@ -107,5 +116,12 @@ const selectPokemon = () => {
   font-weight: bold;
   color: white;
   text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.3);
+}
+
+.favorite-button-position {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  z-index: 10;
 }
 </style>

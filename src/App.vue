@@ -9,6 +9,10 @@ import '@/assets/main.css'
       <nav class="navigation">
         <RouterLink to="/" class="nav-link">ホーム</RouterLink>
         <RouterLink to="/list" class="nav-link">一覧</RouterLink>
+        <RouterLink to="/favorites" class="nav-link">
+          お気に入り
+          <span v-if="favoriteCount > 0" class="favorite-count">{{ favoriteCount }}</span>
+        </RouterLink>
       </nav>
     </header>
 
@@ -64,5 +68,14 @@ import '@/assets/main.css'
 
 .main-content {
   min-height: 500px;
+}
+
+.favorite-count {
+  background: var(--pokemon-primary);
+  color: white;
+  border-radius: 10px;
+  padding: 2px 6px;
+  font-size: 0.8rem;
+  margin-left: 5px;
 }
 </style>
