@@ -37,7 +37,7 @@
 }
 
 .pokemon-info {
-  margin-top: 15px;
+  margin-block: 15px;
   font-size: 14px;
   color: var(--text-secondary);
 }

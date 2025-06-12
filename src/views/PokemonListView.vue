@@ -32,7 +32,7 @@ const updateUrlParams = (page, pageSize) => {
     return
   }
 
-  router.replace({ query })
+  router.push({ query })
 }
 
 // URLクエリパラメータから初期値を設定
