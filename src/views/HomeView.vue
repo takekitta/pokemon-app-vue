@@ -1,14 +1,18 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 import { fetchPokemon, getColorByJapaneseType } from '@/utils/pokemonApi.js'
-import { TOTAL_POKEMON } from '@/constants/pokemon.js'
+import { TOTAL_POKEMON, ERROR_MESSAGES } from '@/constants/pokemon.js'
 import Loader from '@/components/Loader.vue'
+import { useRouter } from 'vue-router'
 
 /** リアクティブな変数 */
 const pokemon = ref(null)
 const loading = ref(false)
 const error = ref(null)
 const inputId = ref(null)
+
+/** ルーター */
+const router = useRouter()
 
 /** computed */
 const primaryTypeColor = computed(() => {
@@ -34,8 +38,8 @@ const loadPokemon = async (pokemonId) => {
   try {
     pokemon.value = await fetchPokemon(pokemonId)
   } catch (err) {
-    error.value = err.message
-    console.error('ポケモンの読み込みに失敗:', err)
+    error.value = ERROR_MESSAGES.POKEMON_DATA_ERROR
+    console.error(ERROR_MESSAGES.POKEMON_DATA_ERROR, err)
   } finally {
     loading.value = false
   }
@@ -63,6 +67,10 @@ const loadPokemonById = async () => {
     await loadPokemon(inputId.value)
     inputId.value = null
   }
+}
+
+const selectPokemon = (pokemon) => {
+  router.push(`/pokemon/${pokemon.id}`)
 }
 
 /** ヘルパー関数 */
@@ -114,7 +122,7 @@ onMounted(async () => {
     <Loader v-if="loading" text="ポケモンを読み込み中..." />
 
     <!-- ポケモン表示 -->
-    <div v-else-if="pokemon" class="pokemon-card">
+    <div v-else-if="pokemon" class="pokemon-card" @click="selectPokemon(pokemon)">
       <h2>No.{{ pokemon.id }}</h2>
       <img :src="pokemon.image" :alt="pokemon.name" />
       <h3>{{ pokemon.name }}</h3>
@@ -137,7 +145,7 @@ onMounted(async () => {
     </div>
 
     <!-- エラー表示 -->
-    <div v-else-if="error" class="error">エラーが発生しました: {{ error }}</div>
+    <div v-else-if="error" class="error">{{ ERROR_MESSAGES.POKEMON_DATA_ERROR }}: {{ error }}</div>
   </div>
 </template>
 
@@ -157,6 +165,7 @@ onMounted(async () => {
 .pokemon-card:hover {
   transform: translateY(-5px);
   box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+  cursor: pointer;
 }
 
 .pokemon-card h2 {

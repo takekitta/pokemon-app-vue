@@ -4,6 +4,7 @@ import {
   TYPE_TRANSLATIONS,
   POKEMON_API_ENDPOINTS,
   LANGUAGES,
+  ERROR_MESSAGES,
 } from '@/constants/pokemon.js'
 
 /**
@@ -36,7 +37,7 @@ export async function fetchPokemonData(pokemonId) {
   const response = await fetch(`${POKEMON_API_ENDPOINTS.POKEMON}/${pokemonId}`)
 
   if (!response.ok) {
-    throw new Error(`ポケモンデータの取得に失敗しました: ${response.status}`)
+    throw new Error(ERROR_MESSAGES.POKEMON_DATA_ERROR + `: ${response.status}`)
   }
 
   return await response.json()
@@ -51,7 +52,7 @@ export async function fetchPokemonSpecies(pokemonId) {
   const response = await fetch(`${POKEMON_API_ENDPOINTS.SPECIES}/${pokemonId}`)
 
   if (!response.ok) {
-    throw new Error(`ポケモン種族データの取得に失敗しました: ${response.status}`)
+    throw new Error(ERROR_MESSAGES.SPECIES_DATA_ERROR + `: ${response.status}`)
   }
 
   return await response.json()
@@ -98,7 +99,7 @@ export async function fetchPokemon(pokemonId) {
       weight: pokemonData.weight,
     }
   } catch (error) {
-    console.error('ポケモンデータの取得エラー:', error)
+    console.error(ERROR_MESSAGES.POKEMON_DATA_ERROR, error)
     throw error
   }
 }
@@ -127,7 +128,7 @@ export async function fetchPokemonList(page = 1, limit = 20) {
     )
 
     if (!response.ok) {
-      throw new Error(`ポケモンリストの取得に失敗: ${response.status}`)
+      throw new Error(ERROR_MESSAGES.POKEMON_NOT_FOUND + `: ${response.status}`)
     }
 
     const data = await response.json()
@@ -156,7 +157,7 @@ export async function fetchPokemonList(page = 1, limit = 20) {
       totalPages: Math.ceil(TOTAL_POKEMON / limit), // 正確な総ページ数を計算
     }
   } catch (error) {
-    console.error('ポケモンリストの取得エラー:', error)
+    console.error(ERROR_MESSAGES.POKEMON_NOT_FOUND, error)
     throw error
   }
 }
@@ -168,4 +169,178 @@ export async function fetchPokemonList(page = 1, limit = 20) {
  */
 function extractIdFromUrl(url) {
   return parseInt(url.split('/').filter(Boolean).pop())
+}
+
+/**
+ * 進化チェーンデータを解析（分岐進化対応版）
+ * @param {Object} chain - 進化チェーンデータ
+ * @returns {Array} 進化チェーンの配列
+ */
+function parseEvolutionChain(chain) {
+  const evolutions = []
+
+  // 再帰的に進化チェーンを解析
+  function parseNode(node, level = 0) {
+    if (!node) return
+
+    const pokemonId = extractIdFromUrl(node.species.url)
+    evolutions.push({
+      id: pokemonId,
+      name: node.species.name,
+      url: node.species.url,
+      level: level,
+    })
+
+    // 複数の進化先がある場合、すべてを処理
+    if (node.evolves_to && node.evolves_to.length > 0) {
+      node.evolves_to.forEach((evolution) => {
+        parseNode(evolution, level + 1)
+      })
+    }
+  }
+
+  parseNode(chain)
+  return evolutions
+}
+
+/**
+ * 特定のポケモンに関連する進化チェーンを取得
+ * @param {number|string} pokemonId - ポケモンID
+ * @returns {Promise<Object>} 進化関係のデータ
+ */
+export async function fetchEvolutionChain(pokemonId) {
+  try {
+    // まず種族データを取得
+    const speciesResponse = await fetch(`${POKEMON_API_ENDPOINTS.SPECIES}/${pokemonId}`)
+    if (!speciesResponse.ok) {
+      throw new Error(ERROR_MESSAGES.SPECIES_DATA_ERROR + `: ${speciesResponse.status}`)
+    }
+    const speciesData = await speciesResponse.json()
+
+    // 進化チェーンURLを取得
+    const evolutionChainUrl = speciesData.evolution_chain.url
+    const evolutionResponse = await fetch(evolutionChainUrl)
+    if (!evolutionResponse.ok) {
+      throw new Error(ERROR_MESSAGES.EVOLUTION_CHAIN_ERROR + `: ${evolutionResponse.status}`)
+    }
+    const evolutionData = await evolutionResponse.json()
+
+    // 進化チェーン全体を解析
+    const allEvolutions = parseEvolutionChain(evolutionData.chain)
+
+    // 現在のポケモンに関連する進化情報を整理
+    return organizeEvolutionData(allEvolutions, parseInt(pokemonId))
+  } catch (error) {
+    console.error(ERROR_MESSAGES.EVOLUTION_CHAIN_ERROR, error)
+    throw error
+  }
+}
+
+/**
+ * 進化データを整理（現在のポケモンを中心に）
+ * @param {Array} allEvolutions - 全進化データ
+ * @param {number} currentPokemonId - 現在のポケモンID
+ * @returns {Object} 整理された進化データ
+ */
+function organizeEvolutionData(allEvolutions, currentPokemonId) {
+  // レベル別にグループ化
+  const evolutionLevels = {}
+  allEvolutions.forEach((evolution) => {
+    if (!evolutionLevels[evolution.level]) {
+      evolutionLevels[evolution.level] = []
+    }
+    evolutionLevels[evolution.level].push(evolution)
+  })
+
+  // 現在のポケモンの情報を取得
+  const currentPokemon = allEvolutions.find((evo) => evo.id === currentPokemonId)
+  if (!currentPokemon) {
+    return { evolutionFamily: allEvolutions, currentLevel: 0 }
+  }
+
+  const currentLevel = currentPokemon.level
+
+  return {
+    evolutionFamily: allEvolutions,
+    currentLevel: currentLevel,
+    preEvolutions: evolutionLevels[currentLevel - 1] || [],
+    currentStage: evolutionLevels[currentLevel] || [],
+    nextEvolutions: evolutionLevels[currentLevel + 1] || [],
+    allLevels: evolutionLevels,
+  }
+}
+
+/**
+ * 詳細なポケモン情報を取得
+ * @param {number|string} pokemonId - ポケモンID
+ * @returns {Promise<Object>} 詳細なポケモンデータ
+ */
+export async function fetchPokemonDetail(pokemonId) {
+  try {
+    // 基本情報、種族情報、進化チェーンを並列取得
+    const [basicData, speciesData, evolutionData] = await Promise.all([
+      fetchPokemon(pokemonId),
+      fetchPokemonSpecies(pokemonId),
+      fetchEvolutionChain(pokemonId),
+    ])
+
+    // フレーバーテキストを取得
+    const flavorText = getFlavorText(speciesData)
+
+    // 進化ファミリーの各ポケモンの詳細情報を取得
+    const evolutionDetails = await Promise.all(
+      evolutionData.evolutionFamily.map(async (evolution) => {
+        try {
+          const pokemonDetail = await fetchPokemon(evolution.id)
+          return {
+            ...pokemonDetail,
+            evolutionLevel: evolution.level,
+          }
+        } catch (error) {
+          console.warn(ERROR_MESSAGES.EVOLUTION_CHAIN_ERROR, error)
+          return null
+        }
+      }),
+    )
+
+    return {
+      ...basicData,
+      flavorText, // 図鑑説明文
+      evolutionData,
+      evolutionFamily: evolutionDetails.filter((pokemon) => pokemon !== null),
+    }
+  } catch (error) {
+    console.error(ERROR_MESSAGES.POKEMON_DATA_ERROR, error)
+    throw error
+  }
+}
+
+/**
+ * ポケモンのフレーバーテキスト（図鑑説明文）を取得
+ * @param {Object} speciesData - 種族データ
+ * @param {string} language - 言語コード（デフォルト: 'ja'）
+ * @returns {string|null} フレーバーテキスト
+ */
+export function getFlavorText(speciesData, language = LANGUAGES.JAPANESE) {
+  if (!speciesData.flavor_text_entries) return null
+
+  // 指定言語のフレーバーテキストを検索
+  const flavorEntry = speciesData.flavor_text_entries.find(
+    (entry) => entry.language.name === language,
+  )
+
+  if (flavorEntry) {
+    // 改行文字を除去して読みやすくする
+    return flavorEntry.flavor_text.replace(/\f/g, '\n').replace(/\u00ad/g, '')
+  }
+
+  // 日本語が見つからない場合は英語を試す
+  if (language !== LANGUAGES.ENGLISH) {
+    const englishEntry = speciesData.flavor_text_entries.find(
+      (entry) => entry.language.name === LANGUAGES.ENGLISH,
+    )
+    return englishEntry ? englishEntry.flavor_text.replace(/\f/g, '\n') : null
+  }
+
+  return null
 }
