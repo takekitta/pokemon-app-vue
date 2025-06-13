@@ -40,7 +40,6 @@ const selectPokemon = () => {
       size="medium"
       variant="icon"
       class="favorite-button-position"
-      @toggle="handleFavoriteToggle"
     />
     <div class="pokemon-number">No.{{ pokemon.id }}</div>
     <img :src="pokemon.image" :alt="pokemon.name" class="pokemon-image" loading="lazy" />
@@ -123,10 +122,5 @@ const selectPokemon = () => {
   top: 8px;
   right: 8px;
   z-index: 10;
-}
-
-[data-theme='dark'] .pokemon-card {
-  background-color: #1e1e1e;
-  border-color: #333;
 }
 </style>

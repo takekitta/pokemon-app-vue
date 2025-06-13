@@ -135,13 +135,7 @@ onMounted(async () => {
     <div class="header-controls">
       <button @click="goBack" class="btn btn-secondary btn--medium">← 戻る</button>
       <!-- お気に入りボタン -->
-      <FavoriteButton
-        v-if="pokemon"
-        :pokemon="pokemon"
-        size="medium"
-        variant="button"
-        @toggle="handleFavoriteToggle"
-      />
+      <FavoriteButton v-if="pokemon" :pokemon="pokemon" size="medium" variant="button" />
     </div>
 
     <!-- ローディング表示 -->
@@ -162,7 +156,6 @@ onMounted(async () => {
           size="large"
           variant="icon"
           class="card-favorite-button"
-          @toggle="handleFavoriteToggle"
         />
         <div class="pokemon-header">
           <h1>No.{{ pokemon.id }} {{ pokemon.name }}</h1>

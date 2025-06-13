@@ -12,6 +12,11 @@ export default defineConfig({
     vueDevTools(),
     webfontDownload(['https://fonts.googleapis.com/css2?family=DotGothic16&display=swap']),
   ],
+  test: {
+    environment: 'jsdom',
+    globals: true,
+    setupFiles: ['./src/test-setup.js'],
+  },
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url)),

@@ -134,7 +134,6 @@ onMounted(async () => {
         size="medium"
         variant="icon"
         class="card-favorite-button"
-        @toggle="handleFavoriteToggle"
       />
       <h2>No.{{ pokemon.id }}</h2>
       <img :src="pokemon.image" :alt="pokemon.name" />
