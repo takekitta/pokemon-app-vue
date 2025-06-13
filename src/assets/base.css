@@ -21,15 +21,28 @@
 
   /* アプリケーション共通色 */
   --pokemon-primary: #3c5aa6;
-  --pokemon-secondary: #ffcb05;
+  --pokemon-secondary: #a8a878;
   --error-color: #d32f2f;
   --error-bg: #ffebee;
-  --text-primary: #2c2c2c;
-  --text-secondary: #666;
   --color-white: #fff;
   --color-black: #000;
   --color-gray: #f5f5f5;
   --color-heart: #ff6b6b;
+  --background-color: #f0f0f0;
+  --text-color-primary: #2c2c2c;
+  --text-color-secondary: #666;
+  --text-color-error: #d32f2f;
+  --text-color-success: #4caf50;
+  --text-color-warning: #ff9800;
+  --text-color-info: #2196f3;
+  --text-color-light: #f5f5f5;
+
+  --bg-overlay: rgba(255, 255, 255, 0.7);
+  --bg-card: rgba(255, 255, 255, 0.9);
+  --bg-surface: rgba(255, 255, 255, 1);
+  --bg-elevation: rgba(0, 0, 0, 0.1);
+  --bg-favorite: rgba(255, 182, 193, 0.9);
+  --bg-favorite-active: rgba(255, 182, 193, 1);
 
   /* アプリケーション共通フォント */
   --font-family: 'DotGothic16', sans-serif;
@@ -61,4 +74,40 @@
   --radius-md: 12px;
   --radius-lg: 16px;
   --radius-xl: 20px;
+}
+/* ダークモード用のカスタムプロパティ */
+[data-theme='dark'] {
+  --pokemon-primary: #5a7bc8;
+  --pokemon-secondary: #a8a878;
+
+  /* アプリケーション共通色 */
+  --pokemon-primary: #3c5aa6;
+  --pokemon-secondary: #a8a878;
+  --color-heart: #ff6b6b;
+  --background-color: #121212;
+  --error-color: #ff5252;
+  --error-bg: #1a1a1a;
+  --gradient-primary: linear-gradient(
+    135deg,
+    var(--pokemon-primary) 0%,
+    var(--pokemon-secondary) 100%
+  );
+  --gradient-secondary: linear-gradient(135deg, #ff6b6b 0%, #feca57 100%);
+  --shadow-sm: 0 2px 8px rgba(255, 255, 255, 0.1);
+  --shadow-md: 0 4px 16px rgba(255, 255, 255, 0.1);
+  --shadow-lg: 0 8px 32px rgba(255, 255, 255, 0.1);
+
+  --text-color-primary: #e0e0e0;
+  --text-color-secondary: #b0b0b0;
+  --text-color-error: #ff5252;
+  --text-color-success: #4caf50;
+  --text-color-warning: #ff9800;
+  --text-color-info: #2196f3;
+  --text-color-light: #f5f5f5;
+  --text-color-dark: #121212;
+
+  --bg-overlay: rgba(30, 30, 30, 0.8);
+  --bg-card: rgba(40, 40, 40, 0.9);
+  --bg-surface: rgba(50, 50, 50, 1);
+  --bg-elevation: rgba(0, 0, 0, 0.2);
 }

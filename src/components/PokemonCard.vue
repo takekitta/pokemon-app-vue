@@ -98,7 +98,7 @@ const selectPokemon = () => {
 .pokemon-name {
   margin: 12px 0 8px 0;
   font-size: 18px;
-  color: var(--text-primary);
+  color: var(--text-color-primary);
   font-weight: bold;
 }
 
@@ -123,5 +123,10 @@ const selectPokemon = () => {
   top: 8px;
   right: 8px;
   z-index: 10;
+}
+
+[data-theme='dark'] .pokemon-card {
+  background-color: #1e1e1e;
+  border-color: #333;
 }
 </style>

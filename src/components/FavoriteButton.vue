@@ -62,7 +62,7 @@ const handleClick = (event) => {
 
 <style scoped>
 .favorite-icon-button {
-  background: rgba(255, 255, 255, 0.9);
+  background: var(--bg-card);
   border: none;
   border-radius: 50%;
   cursor: pointer;
@@ -71,21 +71,21 @@ const handleClick = (event) => {
   justify-content: center;
   transition: all 0.3s ease;
   backdrop-filter: blur(4px);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--shadow-sm);
 }
 
 .favorite-icon-button:hover {
-  background: rgba(255, 255, 255, 1);
+  background: var(--bg-surface);
   transform: scale(1.05);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  box-shadow: var(--shadow-md);
 }
 
 .favorite-icon-button.is-favorite {
-  background: rgba(255, 182, 193, 0.9);
+  background: var(--bg-favorite);
 }
 
 .favorite-icon-button.is-favorite:hover {
-  background: rgba(255, 182, 193, 1);
+  background: var(--bg-favorite-active);
 }
 
 /* アイコンサイズバリエーション */

@@ -83,7 +83,7 @@ const selectPokemon = (pokemon) => {
 }
 
 .empty-state h2 {
-  color: var(--text-primary);
+  color: var(--text-color-primary);
   margin-bottom: 15px;
 }
 

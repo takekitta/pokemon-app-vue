@@ -8,6 +8,9 @@
 html {
   font-size: 16px;
   box-sizing: border-box;
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
 }
 
 *,
@@ -18,8 +21,29 @@ html {
 
 body {
   font-family: var(--font-family);
-  color: var(--text-primary);
+  color: var(--text-color-primary);
   margin: 0;
   padding: 0;
   line-height: 1.6;
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
+}
+
+[data-theme='dark'] body {
+  background-color: var(--background-color);
+  color: var(--text-color-primary);
+}
+
+[data-theme='dark'] ::-webkit-scrollbar {
+  background-color: #2a2a2a;
+}
+
+[data-theme='dark'] ::-webkit-scrollbar-thumb {
+  background-color: #555;
+  border-radius: 4px;
+}
+
+[data-theme='dark'] ::-webkit-scrollbar-thumb:hover {
+  background-color: #777;
 }

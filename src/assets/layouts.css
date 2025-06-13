@@ -23,7 +23,7 @@
 
 .loading {
   font-size: 18px;
-  color: var(--text-secondary);
+  color: var(--text-color-secondary);
   margin: 50px 0;
   text-align: center;
 }
@@ -39,7 +39,7 @@
 .pokemon-info {
   margin-block: 15px;
   font-size: 14px;
-  color: var(--text-secondary);
+  color: var(--text-color-secondary);
 }
 
 .pokemon-info p {

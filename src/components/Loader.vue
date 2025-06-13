@@ -46,7 +46,7 @@ export default {
   background: linear-gradient(135deg, red 0%, red 100%);
   border-radius: 80px 80px 0 0;
   position: relative;
-  border: 3px solid var(--text-secondary);
+  border: 1px solid var(--text-secondary);
   border-bottom: none;
 }
 
@@ -56,7 +56,7 @@ export default {
   background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
   border-radius: 0 0 80px 80px;
   position: relative;
-  border: 3px solid var(--text-secondary);
+  border: 1px solid var(--text-color-secondary);
   border-top: none;
 }
 
@@ -67,7 +67,7 @@ export default {
   transform: translate(-50%, -50%);
   width: 24px;
   height: 24px;
-  background: var(--text-secondary);
+  background: var(--text-color-secondary);
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -78,9 +78,9 @@ export default {
 .pokeball-button {
   width: 12px;
   height: 12px;
-  background: #fff;
+  background: white;
   border-radius: 50%;
-  border: 2px solid var(--text-secondary);
+  border: 2px solid var(--text-color-secondary);
 }
 
 .loading-text {
@@ -106,7 +106,7 @@ export default {
   left: 15px;
   width: 15px;
   height: 15px;
-  background: rgba(255, 255, 255, 0.3);
+  background: var(--text-secondary);
   border-radius: 50%;
 }
 </style>

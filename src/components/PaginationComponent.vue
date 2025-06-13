@@ -184,7 +184,7 @@ watch(
 
 .pagination-info {
   font-size: 0.9rem;
-  color: var(--text-secondary);
+  color: var(--text-color-secondary);
 }
 
 .pagination-container {
@@ -199,16 +199,17 @@ watch(
   padding: 0 12px;
   border-radius: 6px;
   border: 1px solid #ddd;
-  background: white;
-  color: var(--text-primary);
+  background: var(--bg-card);
+  color: var(--text-color-primary);
   cursor: pointer;
   transition: all 0.2s ease;
   font-weight: 500;
 }
 
 .paginate-button:hover:not(:disabled) {
-  background: #f5f5f5;
+  background: var(--pokemon-secondary);
   border-color: var(--pokemon-primary);
+  color: var(--color-white);
 }
 
 .paginate-button:disabled {
@@ -219,7 +220,7 @@ watch(
 .active-page {
   background: var(--pokemon-primary) !important;
   border-color: var(--pokemon-primary) !important;
-  color: white !important;
+  color: var(--color-white) !important;
 }
 
 .active-page:hover {
@@ -243,7 +244,8 @@ watch(
   padding: 4px 8px;
   border: 1px solid #ddd;
   border-radius: 4px;
-  background: white;
+  background: var(--bg-card);
+  color: var(--text-color-primary);
 }
 
 /* レスポンシブ対応 */

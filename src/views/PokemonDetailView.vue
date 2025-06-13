@@ -288,12 +288,12 @@ onMounted(async () => {
   padding: 30px;
   margin-bottom: 30px;
   background: v-bind(cardBackgroundGradient);
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--shadow-md);
   position: relative;
 }
 
 .pokemon-header h1 {
-  color: var(--text-primary);
+  color: var(--text-color-primary);
   margin-bottom: 20px;
   font-size: 2.5rem;
   text-align: center;
@@ -324,7 +324,6 @@ onMounted(async () => {
 }
 
 .info-group h3 {
-  color: var(--text-primary);
   margin-bottom: 10px;
   font-size: 1.3rem;
 }
@@ -341,7 +340,7 @@ onMounted(async () => {
   border-radius: 20px;
   font-size: 14px;
   font-weight: bold;
-  color: white;
+  color: var(--color-white);
   text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.3);
 }
 
@@ -355,7 +354,7 @@ onMounted(async () => {
   display: flex;
   justify-content: space-between;
   padding: 10px;
-  background: rgba(255, 255, 255, 0.7);
+  background: var(--bg-overlay);
   border-radius: 8px;
 }
 
@@ -366,21 +365,21 @@ onMounted(async () => {
 
 .stat-value {
   font-weight: bold;
-  color: var(--text-primary);
+  color: var(--text-color-primary);
 }
 
 .stats-card,
 .evolution-card {
-  background: white;
+  background: v-bind(cardBackgroundGradient);
   border-radius: 15px;
   padding: 25px;
   margin-bottom: 20px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--shadow-sm);
 }
 
 .stats-card h2,
 .evolution-card h2 {
-  color: var(--text-primary);
+  color: var(--text-color-primary);
   margin-bottom: 20px;
   font-size: 1.8rem;
 }
@@ -440,7 +439,7 @@ onMounted(async () => {
 }
 
 .evolution-pokemon:hover {
-  background: rgba(0, 0, 0, 0.05);
+  background: var(--bg-elevation);
   transform: translateY(-2px);
 }
 
@@ -458,13 +457,13 @@ onMounted(async () => {
 .evolution-pokemon p {
   margin-top: 8px;
   font-weight: bold;
-  color: var(--text-primary);
+  color: var(--text-color-primary);
 }
 
 .evolution-arrow {
   font-size: 24px;
   font-weight: bold;
-  color: var(--text-secondary);
+  color: var(--text-color-secondary);
 }
 
 .evolution-level {
@@ -473,7 +472,7 @@ onMounted(async () => {
 }
 
 .evolution-level-title {
-  color: var(--text-secondary);
+  color: var(--text-color-secondary);
   font-size: 1.2rem;
   margin-bottom: 15px;
   text-align: center;
@@ -489,14 +488,14 @@ onMounted(async () => {
 .evolution-arrow-down {
   font-size: 24px;
   font-weight: bold;
-  color: var(--text-secondary);
+  color: var(--text-color-secondary);
   margin: 15px 0;
   text-align: center;
 }
 
 .pokemon-id {
   font-size: 0.8rem;
-  color: var(--text-secondary);
+  color: var(--text-color-secondary);
   margin-top: 4px;
 }
 

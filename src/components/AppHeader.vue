@@ -38,7 +38,7 @@ onMounted(() => {
 
 <style scoped>
 .app-header {
-  background: rgba(255, 255, 255, 0.95);
+  background: var(--bg-card);
   backdrop-filter: blur(20px);
   border-radius: 20px;
   padding: 24px 32px;
@@ -48,9 +48,15 @@ onMounted(() => {
   transition: all 0.3s ease;
 }
 
+[data-theme='dark'] .app-header {
+  background: var(--bg-card);
+  box-shadow: var(--shadow-sm);
+  border-color: #333;
+}
+
 .app-header--scrolled {
   transform: translateY(-2px);
-  box-shadow: 0 15px 50px rgba(0, 0, 0, 0.15);
+  box-shadow: var(--shadow-md);
 }
 
 .header-content {
@@ -82,7 +88,6 @@ onMounted(() => {
   font-weight: 700;
   margin: 0;
   color: var(--pokemon-primary);
-
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   display: inline-block;
 }

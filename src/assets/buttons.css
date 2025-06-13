@@ -8,6 +8,15 @@
   transition: all 0.3s ease;
   min-width: 80px;
   line-height: 1em;
+  background-color: var(--pokemon-primary);
+  color: var(--color-white);
+  box-shadow: var(--shadow-sm);
+}
+
+[data-theme='dark'] .btn {
+  background-color: var(--pokemon-primary);
+  color: var(--text-color-primary);
+  box-shadow: var(--shadow-sm);
 }
 
 .btn:disabled {
@@ -15,42 +24,40 @@
   cursor: not-allowed;
 }
 
+.btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  background-color: var(--pokemon-secondary);
+}
+
 .btn-primary {
   background-color: var(--pokemon-primary);
-  color: var(--color-white);
 }
 
 .btn-primary:hover:not(:disabled) {
   background-color: var(--pokemon-secondary);
-  transform: translateY(-2px);
 }
 
 .btn-secondary {
-  background-color: var(--text-secondary);
-  color: var(--color-white);
+  background-color: var(--text-color-secondary);
 }
 
 .btn-secondary:hover:not(:disabled) {
-  background-color: var(--text-primary);
   transform: translateY(-2px);
 }
 
 .btn-favorite {
-  background-color: var(--text-secondary);
-  color: var(--color-white);
+  background-color: var(--text-color-secondary);
   display: flex;
   align-items: center;
   gap: 8px;
 }
 
 .btn-favorite:hover:not(:disabled) {
-  background-color: var(--text-primary);
   transform: translateY(-2px);
 }
 
 .btn-favorite-active {
   background-color: var(--pokemon-primary);
-  color: var(--color-white);
   display: flex;
   align-items: center;
   gap: 8px;

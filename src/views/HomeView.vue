@@ -189,7 +189,7 @@ onMounted(async () => {
 }
 
 .pokemon-card h3 {
-  color: var(--text-primary);
+  color: var(--text-color-primary);
   margin: 15px 0;
   font-size: 28px;
 }

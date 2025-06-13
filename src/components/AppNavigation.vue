@@ -2,6 +2,7 @@
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { useFavorites } from '@/composables/useFavorites.js'
+import ThemeToggle from '@/components/ThemeToggle.vue'
 
 const route = useRoute()
 const { favoriteCount } = useFavorites()
@@ -53,20 +54,24 @@ const isCurrentRoute = computed(() => (path) => {
           {{ item.badge.value }}
         </div>
       </RouterLink>
+      <div class="theme-toggle-container">
+        <ThemeToggle />
+      </div>
     </div>
   </nav>
 </template>
 
 <style scoped>
 .app-navigation {
-  background: white;
+  background: var(--bg-card);
   border-radius: 12px;
   padding: 8px;
-  box-shadow: 0 2px 16px rgba(0, 0, 0, 0.06);
+  box-shadow: var(--shadow-sm);
 }
 
 .nav-container {
   display: flex;
+  align-items: center;
   gap: 4px;
 }
 
@@ -77,7 +82,7 @@ const isCurrentRoute = computed(() => (path) => {
   justify-content: center;
   gap: 8px;
   padding: 14px 20px;
-  color: var(--text-primary);
+  color: var(--text-color-primary);
   text-decoration: none;
   transition: all 0.2s ease;
   font-weight: 600;
@@ -90,7 +95,7 @@ const isCurrentRoute = computed(() => (path) => {
 
 .nav-item--active {
   color: var(--pokemon-primary);
-  background: rgba(0, 0, 0, 0.05);
+  background: var(--bg-card);
   border-radius: 8px;
 }
 
