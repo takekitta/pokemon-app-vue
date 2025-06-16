@@ -24,6 +24,11 @@ const router = createRouter({
       name: 'favorites',
       component: () => import('@/views/FavoritesView.vue'),
     },
+    {
+      path: '/silhouette-quiz',
+      name: 'silhouetteQuiz',
+      component: () => import('@/views/SilhouetteQuizView.vue'),
+    },
   ],
 })
 
