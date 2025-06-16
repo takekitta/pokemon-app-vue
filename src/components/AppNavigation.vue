@@ -22,6 +22,12 @@ const navItems = [
     description: 'ポケモン図鑑',
   },
   {
+    name: 'クイズ',
+    path: '/silhouette-quiz',
+    icon: '❓',
+    description: 'シルエットクイズ',
+  },
+  {
     name: 'お気に入り',
     path: '/favorites',
     icon: '❤️',
@@ -50,9 +56,6 @@ const isCurrentRoute = computed(() => (path) => {
       >
         <span class="nav-icon">{{ item.icon }}</span>
         <span class="nav-text">{{ item.name }}</span>
-        <div v-if="item.badge && item.badge.value > 0" class="nav-badge">
-          {{ item.badge.value }}
-        </div>
       </RouterLink>
       <div class="theme-toggle-container">
         <ThemeToggle />
