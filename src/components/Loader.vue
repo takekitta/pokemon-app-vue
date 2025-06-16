@@ -43,10 +43,11 @@ export default {
 .pokeball-top {
   width: 80px;
   height: 40px;
-  background: linear-gradient(135deg, red 0%, red 100%);
+  background: linear-gradient(135deg, #ff4757 0%, #ff4757 100%);
   border-radius: 80px 80px 0 0;
   position: relative;
-  border: 1px solid var(--text-secondary);
+  border: 3px solid #333;
+  border-radius: 80px 80px 0 0;
   border-bottom: none;
 }
 
@@ -56,7 +57,7 @@ export default {
   background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
   border-radius: 0 0 80px 80px;
   position: relative;
-  border: 1px solid var(--text-color-secondary);
+  border: 3px solid #333;
   border-top: none;
 }
 
