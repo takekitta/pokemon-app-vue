@@ -1,34 +1,35 @@
 <script setup>
-import { useDark, useToggle } from '@vueuse/core'
+import { useTheme } from '@/composables/useTheme.js'
 
-const isDark = useDark({
-  selector: 'html',
-  attribute: 'data-theme',
-  valueDark: 'dark',
-  valueLight: 'light',
-  storageKey: 'pokemon-app-theme',
-})
-
-const toggleDark = useToggle(isDark)
+const { isDark, toggleTheme } = useTheme()
 </script>
 
 <template>
-  <div @click="toggleDark()" class="theme-toggle">
+  <button
+    class="theme-toggle"
+    @click="toggleTheme()"
+    :aria-label="isDark ? 'ライトモードに切り替え' : 'ダークモードに切り替え'"
+  >
     <span class="theme-icon">{{ isDark ? '☀️' : '🌙' }}</span>
-    <span class="theme-text">{{ isDark ? 'ライト' : 'ダーク' }}</span>
-  </div>
+  </button>
 </template>
 
 <style scoped>
 .theme-toggle {
-  display: flex;
-  align-items: center;
-  gap: 8px;
+  background: none;
+  border: none;
   cursor: pointer;
   padding: 8px;
+  border-radius: 50%;
+  transition: all 0.2s ease;
+}
+
+.theme-toggle:hover {
+  background: var(--bg-surface);
 }
 
 .theme-icon {
-  font-size: 16px;
+  font-size: 20px;
+  display: block;
 }
 </style>

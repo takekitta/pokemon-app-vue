@@ -1,13 +1,27 @@
 <script setup>
+import { ref } from 'vue'
 import AppHeader from '@/components/AppHeader.vue'
 import AppNavigation from '@/components/AppNavigation.vue'
 import '@/assets/main.css'
+
+const isMenuOpen = ref(false)
+
+const handleMenuToggle = (isOpen) => {
+  isMenuOpen.value = isOpen
+}
+
+const closeMenu = () => {
+  isMenuOpen.value = false
+}
 </script>
 
 <template>
   <div class="app-container">
-    <AppHeader />
-    <AppNavigation />
+    <AppHeader @menu-toggle="handleMenuToggle">
+      <template #menu-content>
+        <AppNavigation @close-menu="closeMenu" />
+      </template>
+    </AppHeader>
 
     <main class="main-content">
       <RouterView />
@@ -29,17 +43,6 @@ import '@/assets/main.css'
   flex: 1;
   margin-top: 32px;
   animation: fadeIn 0.6s ease-out;
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
 }
 
 .app-footer {
